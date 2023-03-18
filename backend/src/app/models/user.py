@@ -7,6 +7,7 @@ from app.db.base_class import Base
 
 if TYPE_CHECKING:
     from .item import Item  # noqa: F401
+    from .snippet import Snippet
 
 
 class User(Base):
@@ -17,3 +18,4 @@ class User(Base):
     is_active: bool = Column(Boolean(), default=True)
     is_superuser: bool = Column(Boolean(), default=False)
     items: List["Item"] = relationship("Item", back_populates="owner")
+    snippets: List["Snippet"] = relationship("Snippet", back_populates="owner")
