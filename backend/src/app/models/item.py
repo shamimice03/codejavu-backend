@@ -13,5 +13,5 @@ class Item(Base):
     id: int = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True)
     description = Column(String, index=True)
-    owner_id = Column(Integer, ForeignKey("user.id"))
-    owner: "User" = relationship("User", back_populates="items")
+    user_id = Column(Integer, ForeignKey("user.id"))
+    user: "User" = relationship("User", back_populates="items")
