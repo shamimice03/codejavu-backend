@@ -12,4 +12,4 @@ if TYPE_CHECKING:
 class Language(Base):
     id: int = Column(Integer, primary_key=True, index=True)
     name: str = Column(String, index=True)
-    snippets: "Snippet" = relationship("Snippet")
+    snippets: "Snippet" = relationship("Snippet", back_populates="language")

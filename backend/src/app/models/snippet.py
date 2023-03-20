@@ -1,15 +1,16 @@
 from typing import TYPE_CHECKING, List
 
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, Table
 from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
+from .tag_assign import TagAssign
 
 if TYPE_CHECKING:
     from .user import User
     from .language import Language
     from .link import Link
-    from .tag_assign import TagAssign
+    from .tag import Tag
 
 
 class Snippet(Base):
@@ -19,6 +20,6 @@ class Snippet(Base):
     user_id: int = Column(Integer, ForeignKey("user.id"))
     user: "User" = relationship("User", back_populates="snippets")
     language_id: int = Column(Integer, ForeignKey("language.id"))
-    language: "Language" = relationship("Language", back_populates="snippet")
+    language: "Language" = relationship("Language", back_populates="snippets")
     links: List["Link"] = relationship("Link")
-    tags: List["TagAssign"] = relationship("TagAssign")
+    tags: List["Tag"] = relationship("Tag", secondary=TagAssign)
