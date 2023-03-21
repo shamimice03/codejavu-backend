@@ -1,3 +1,4 @@
+import logging
 from typing import List
 
 from fastapi.encoders import jsonable_encoder
@@ -12,21 +13,23 @@ from app.schemas.snippet import SnippetCreate, SnippetUpdate
 
 class CRUDSnippet(CRUDBase[Snippet, SnippetCreate, SnippetUpdate]):
     async def create_with_owner(
-            self, db: AsyncSession, *, obj_in: SnippetCreate, owner_id: int
+            self, db: AsyncSession, *, obj_in: SnippetCreate, user_id: int
     ) -> Snippet:
         obj_in_data = jsonable_encoder(obj_in)
-        db_obj = self.model(**obj_in_data, owner_id=owner_id)
+
+        db_obj = self.model(**obj_in_data, user_id=user_id)  # type: ignore
+
         db.add(db_obj)
         await db.commit()
         await db.refresh(db_obj)
         return db_obj
 
     async def get_multi_by_owner(
-            self, db: AsyncSession, *, owner_id: int, skip: int = 0, limit: int = 100
+            self, db: AsyncSession, *, user_id: int, skip: int = 0, limit: int = 100
     ) -> List[Snippet]:
         result = await db.execute(
             select(self.model)
-            .filter(Snippet.owner_id == owner_id)
+            .filter(Snippet.user_id == user_id)
             .offset(skip)
             .limit(limit)
             .all()

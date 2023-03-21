@@ -1,17 +1,28 @@
-from typing import Optional
+from typing import List
 
 from pydantic import BaseModel
+
+from app.models import User
+from app.models.language import Language
+from app.models.link import Link
+from app.models.tag import Tag
+from app.schemas.language import LanguageBase
+from app.schemas.link import LinkBase
+from app.schemas.tag import TagBase
+from app.schemas.user import UserBase
 
 
 # Shared properties
 class SnippetBase(BaseModel):
-    title: Optional[str] = None
-    description: Optional[str] = None
+    title: str
+    snippet: str
 
 
 # Properties to receive on snippet creation
 class SnippetCreate(SnippetBase):
     title: str
+    snippet: str
+    language_id: int
 
 
 # Properties to receive on snippet update
@@ -23,7 +34,9 @@ class SnippetUpdate(SnippetBase):
 class SnippetInDBBase(SnippetBase):
     id: int
     title: str
-    owner_id: int
+    snippet: str
+    user_id: int
+    language_id: int
 
     class Config:
         orm_mode = True

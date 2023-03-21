@@ -23,7 +23,7 @@ class ItemUpdate(ItemBase):
 class ItemInDBBase(ItemBase):
     id: int
     title: str
-    owner_id: int
+    user_id: int
 
     class Config:
         orm_mode = True
@@ -34,6 +34,6 @@ class Item(ItemInDBBase):
     pass
 
 
-# Properties properties stored in DB
+# Properties stored in DB
 class ItemInDB(ItemInDBBase):
     pass

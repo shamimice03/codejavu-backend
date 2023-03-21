@@ -24,7 +24,7 @@ async def read_items(
         items = await crud.item.get_multi(db, skip=skip, limit=limit)
     else:
         items = await crud.item.get_multi_by_owner(
-            db=db, owner_id=current_user.id, skip=skip, limit=limit
+            db=db, user_id=current_user.id, skip=skip, limit=limit
         )
     return items
 
@@ -39,7 +39,7 @@ async def create_item(
     """
     Create new item.
     """
-    item = await crud.item.create_with_owner(db=db, obj_in=item_in, owner_id=current_user.id)
+    item = await crud.item.create_with_owner(db=db, obj_in=item_in, user_id=current_user.id)
     return item
 
 
@@ -56,7 +56,7 @@ async def read_item(
     item = await crud.item.get(db=db, id=id)
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
-    if not crud.user.is_superuser(current_user) and (item.owner_id != current_user.id):
+    if not crud.user.is_superuser(current_user) and (item.user_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
     return item
 

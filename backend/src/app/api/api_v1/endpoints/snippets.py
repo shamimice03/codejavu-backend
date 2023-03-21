@@ -23,7 +23,7 @@ async def read_snippets(
         snippets = await crud.snippet.get_multi(db, skip=skip, limit=limit)
     else:
         snippets = await crud.snippet.get_multi_by_owner(
-            db=db, owner_id=current_user.id, skip=skip, limit=limit
+            db=db, user_id=current_user.id, skip=skip, limit=limit
         )
     return snippets
 
@@ -38,7 +38,7 @@ async def create_snippet(
     """
     Create new snippet.
     """
-    snippet = await crud.snippet.create_with_owner(db=db, obj_in=snippet_in, owner_id=current_user.id)
+    snippet = await crud.snippet.create_with_owner(db=db, obj_in=snippet_in, user_id=current_user.id)
     return snippet
 
 
@@ -55,7 +55,7 @@ async def read_snippet(
     snippet = await crud.snippet.get(db=db, id=id)
     if not snippet:
         raise HTTPException(status_code=404, detail="Snippet not found")
-    if not crud.user.is_superuser(current_user) and (snippet.owner_id != current_user.id):
+    if not crud.user.is_superuser(current_user) and (snippet.user_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
     return snippet
 

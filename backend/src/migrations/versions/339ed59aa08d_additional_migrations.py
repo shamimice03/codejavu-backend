@@ -1,8 +1,8 @@
-"""initial migration
+"""additional migrations
 
-Revision ID: 07af0da0190e
-Revises: 
-Create Date: 2023-03-20 05:20:05.140634
+Revision ID: 339ed59aa08d
+Revises: d4867f3a4c0a
+Create Date: 2023-03-20 14:05:48.444152
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '07af0da0190e'
-down_revision = None
+revision = '339ed59aa08d'
+down_revision = 'd4867f3a4c0a'
 branch_labels = None
 depends_on = None
 
@@ -40,13 +40,13 @@ def upgrade():
     op.create_index(op.f('ix_snippet_title'), 'snippet', ['title'], unique=False)
     op.create_table('tag',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('url', sa.String(), nullable=True),
+    sa.Column('name', sa.String(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_tag_id'), 'tag', ['id'], unique=False)
-    op.create_index(op.f('ix_tag_url'), 'tag', ['url'], unique=False)
+    op.create_index(op.f('ix_tag_name'), 'tag', ['name'], unique=False)
     op.create_table('link',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('url', sa.String(), nullable=True),
@@ -59,10 +59,8 @@ def upgrade():
     op.create_table('tag_assign',
     sa.Column('snippet_id', sa.Integer(), nullable=True),
     sa.Column('tag_id', sa.Integer(), nullable=True),
-    sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['snippet_id'], ['snippet.id'], ),
-    sa.ForeignKeyConstraint(['tag_id'], ['tag.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], )
+    sa.ForeignKeyConstraint(['tag_id'], ['tag.id'], )
     )
     op.add_column('item', sa.Column('user_id', sa.Integer(), nullable=True))
     op.drop_constraint('item_owner_id_fkey', 'item', type_='foreignkey')
@@ -93,7 +91,7 @@ def downgrade():
     op.drop_index(op.f('ix_link_url'), table_name='link')
     op.drop_index(op.f('ix_link_id'), table_name='link')
     op.drop_table('link')
-    op.drop_index(op.f('ix_tag_url'), table_name='tag')
+    op.drop_index(op.f('ix_tag_name'), table_name='tag')
     op.drop_index(op.f('ix_tag_id'), table_name='tag')
     op.drop_table('tag')
     op.drop_index(op.f('ix_snippet_title'), table_name='snippet')

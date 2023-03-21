@@ -38,11 +38,11 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return res
 
     async def get_multi_by_owner(
-            self, db: AsyncSession, *, owner_id: int, skip: int = 0, limit: int = 100
+            self, db: AsyncSession, *, user_id: int, skip: int = 0, limit: int = 100
     ) -> List[ModelType]:
         result = await db.execute(
             select(self.model)
-            .filter(self.model.owner_id == owner_id)
+            .filter(self.model.user_id == user_id)
             .offset(skip)
             .limit(limit)
         )

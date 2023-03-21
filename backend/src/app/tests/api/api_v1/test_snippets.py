@@ -14,7 +14,22 @@ pytestmark = pytest.mark.asyncio
 async def test_create_snippet(
         client: AsyncClient, superuser_token_headers: dict, async_get_db: AsyncSession
 ) -> None:
-    data = {"title": "Foo", "description": "Fighters"}
+    data = {
+        "title": "oldddd",
+        "snippet": "<?php echo \"heyy\">",
+        "language_id": {
+            "id": 1
+        },
+        "links": [
+            {"url": "new_url2"}
+        ],
+        "tags": [
+            {
+                "id": 1,
+                "name": "bla"
+            }
+        ]
+    }
     response = await client.post(
         f"{settings.API_V1_STR}/snippets/", headers=superuser_token_headers, json=data,
     )
@@ -23,7 +38,7 @@ async def test_create_snippet(
     assert content["title"] == data["title"]
     assert content["description"] == data["description"]
     assert "id" in content
-    assert "owner_id" in content
+    assert "user_id" in content
 
 
 async def test_read_snippet(
@@ -38,4 +53,4 @@ async def test_read_snippet(
     assert content["title"] == snippet.title
     assert content["description"] == snippet.description
     assert content["id"] == snippet.id
-    assert content["owner_id"] == snippet.owner_id
+    assert content["user_id"] == snippet.user_id

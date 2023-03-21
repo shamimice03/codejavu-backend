@@ -8,5 +8,4 @@ TagAssign = Table(
     Base.metadata,
     Column("snippet_id", ForeignKey("snippet.id")),
     Column("tag_id", ForeignKey("tag.id")),
-    Column("user_id", ForeignKey("user.id")),
 )
