@@ -1,3 +1,5 @@
+import os
+import pathlib
 import secrets
 from typing import Any, Dict, List, Optional, Union
 
@@ -9,6 +11,10 @@ class AsyncPostgresDsn(PostgresDsn):
 
 
 class Settings(BaseSettings):
+    class Config:
+        env_file = f"{os.path.dirname(os.path.abspath(__file__))}/../../../../.env"
+        case_sensitive = True
+
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = secrets.token_urlsafe(32)
     # 60 minutes * 24 hours * 8 days = 8 days
@@ -107,9 +113,6 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER: EmailStr
     FIRST_SUPERUSER_PASSWORD: str
     USERS_OPEN_REGISTRATION: bool = False
-
-    class Config:
-        case_sensitive = True
 
 
 settings = Settings()
