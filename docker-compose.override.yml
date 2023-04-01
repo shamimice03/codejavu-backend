@@ -39,7 +39,7 @@ services:
     ports:
       - "8888:8888"
     volumes:
-      - ./backend/src:/app
+      - ./backend/src:/src
     environment:
       - JUPYTER=jupyter lab --ip=0.0.0.0 --allow-root --NotebookApp.custom_display_url=http://127.0.0.1:8888
       - SERVER_HOST=http://${DOMAIN?Variable not set}
@@ -59,7 +59,7 @@ services:
 
   celeryworker:
     volumes:
-      - ./backend/src:/app
+      - ./backend/src:/src
     environment:
       - RUN=celery -A app.worker worker -l info -Q main-queue -c 1
       - JUPYTER=jupyter lab --ip=0.0.0.0 --allow-root --NotebookApp.custom_display_url=http://127.0.0.1:8888

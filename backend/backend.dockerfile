@@ -13,9 +13,9 @@ ENV PATH="/opt/poetry/bin:$PATH"
 RUN poetry config virtualenvs.create false
 
 # Copy poetry.lock* in case it doesn't exist in the repo
-COPY ./src/pyproject.toml ./src/poetry.lock* /app/
+COPY ./src/pyproject.toml ./src/poetry.lock* /src/
 
-WORKDIR /app/
+WORKDIR /src/
 
 # Allow installing dev dependencies to run tests
 ARG INSTALL_DEV=false
@@ -35,7 +35,7 @@ COPY ./gunicorn_conf.py /gunicorn_conf.py
 COPY ./start-reload.sh /start-reload.sh
 RUN chmod +x /start-reload.sh
 
-COPY ./src /app
-ENV PYTHONPATH=/app
+COPY ./src /src
+ENV PYTHONPATH=/src
 
 CMD ["/start.sh"]
