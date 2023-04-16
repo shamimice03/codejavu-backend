@@ -9,7 +9,7 @@ from app.api import deps
 router = APIRouter()
 
 
-@router.get("/", response_model=List[schemas.Snippet])
+@router.get("/", response_model=List[schemas.SnippetWithRelatedData])
 async def read_snippets(
         db: AsyncSession = Depends(deps.async_get_db),
         skip: int = 0,
@@ -25,6 +25,7 @@ async def read_snippets(
         snippets = await crud.snippet.get_multi_by_owner(
             db=db, user_id=current_user.id, skip=skip, limit=limit
         )
+    print(vars(snippets[0]))
     return snippets
 
 
