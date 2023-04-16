@@ -4,11 +4,12 @@ from typing import List
 from fastapi.encoders import jsonable_encoder
 # from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 from sqlalchemy.sql.expression import select
 
 from app.crud.base import CRUDBase
 from app.models.snippet import Snippet
-from app.schemas.snippet import SnippetCreate, SnippetUpdate
+from app.schemas.snippet import SnippetCreate, SnippetUpdate, SnippetWithRelatedData
 
 
 class CRUDSnippet(CRUDBase[Snippet, SnippetCreate, SnippetUpdate]):

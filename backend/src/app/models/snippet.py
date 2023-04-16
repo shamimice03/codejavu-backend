@@ -22,4 +22,4 @@ class Snippet(Base):
     language_id: int = Column(Integer, ForeignKey("language.id"))
     language: "Language" = relationship("Language", back_populates="snippets")
     #links: List["Link"] = relationship("Link")
-    tags: List["Tag"] = relationship("Tag", secondary=TagAssign)
+    #tags: List["Tag"] = relationship("Tag", secondary=TagAssign)
