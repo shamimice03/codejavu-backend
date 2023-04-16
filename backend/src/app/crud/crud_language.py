@@ -25,7 +25,6 @@ class CRUDLanguage(CRUDBase[Language, LanguageCreate, LanguageUpdate]):
     ) -> List[Language]:
         result = await db.execute(
             select(self.model)
-            .all()
         )
         return list(result.scalars().all())
 
