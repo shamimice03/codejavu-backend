@@ -34,5 +34,6 @@ async def init_db(db: AsyncSession) -> None:
         ]
     for language in languages:
         language_in = schemas.LanguageCreate(id=language["id"], name=language["name"])
-        language = await crud.language.create(db, obj_in=language_in)  # noqa: F841
+        if not language_in:
+            language = await crud.language.create(db, obj_in=language_in)  # noqa: F841
 

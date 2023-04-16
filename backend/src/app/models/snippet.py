@@ -20,6 +20,6 @@ class Snippet(Base):
     user_id: Column["Integer"] = Column(Integer, ForeignKey("user.id"))
     user: "User" = relationship("User", back_populates="snippets")
     language_id: int = Column(Integer, ForeignKey("language.id"))
-    language: "Language" = relationship("Language", back_populates="snippets")
+    language: "Language" = relationship("Language", back_populates="snippets", lazy="joined")
     #links: List["Link"] = relationship("Link")
     #tags: List["Tag"] = relationship("Tag", secondary=TagAssign)
