@@ -34,7 +34,7 @@ class CRUDSnippet(CRUDBase[Snippet, SnippetCreate, SnippetUpdate]):
             .limit(limit)
             .all()
         )
-        return result.scalars().all()
+        return list(result.scalars().all())
 
 
 snippet = CRUDSnippet(Snippet)

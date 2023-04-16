@@ -31,7 +31,7 @@ class CRUDItem(CRUDBase[Item, ItemCreate, ItemUpdate]):
             .limit(limit)
             .all()
         )
-        return result.scalars().all()
+        return list(result.scalars().all())
 
 
 item = CRUDItem(Item)
