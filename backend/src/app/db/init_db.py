@@ -26,12 +26,10 @@ async def init_db(db: AsyncSession) -> None:
         user = await crud.user.create(db, obj_in=user_in)  # noqa: F841
         user = await crud.user.update(db, db_obj=user, obj_in={"is_active": True})  # noqa: F841
 
-    # write sqlalchemy code to insert language data into the languages table
-    # if you don't want to use migrations, use the following commented out code instead
     languages = [
         {"id": 1, "name": "Java"},
         {"id": 2, "name": "Python"},
-        ]
+    ]
     for language in languages:
         language_in = schemas.LanguageCreate(id=language["id"], name=language["name"])
         if not language_in:

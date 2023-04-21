@@ -2,7 +2,6 @@ from typing import List
 
 from pydantic import BaseModel
 
-from app.models.tag_assign import TagAssign
 from app.schemas.language import Language
 from app.schemas.tag import Tag
 
@@ -43,7 +42,7 @@ class Snippet(SnippetInDBBase):
 
 
 class SnippetWithRelatedData(Snippet):
-    #tags: List[Tag] = []
+    tags: List[Tag] = []
     language: Language = None
 
 
