@@ -29,7 +29,7 @@ async def read_snippets(
     return snippets
 
 
-@router.post("/", response_model=schemas.Snippet)
+@router.post("/", response_model=schemas.SnippetWithRelatedData)
 async def create_snippet(
         *,
         db: AsyncSession = Depends(deps.async_get_db),
@@ -43,7 +43,7 @@ async def create_snippet(
     return snippet
 
 
-@router.get("/{id}", response_model=schemas.Snippet)
+@router.get("/{id}", response_model=schemas.SnippetWithRelatedData)
 async def read_snippet(
         *,
         db: AsyncSession = Depends(deps.async_get_db),
@@ -61,7 +61,7 @@ async def read_snippet(
     return snippet
 
 
-@router.put("/{id}", response_model=schemas.Snippet)
+@router.put("/{id}", response_model=schemas.SnippetWithRelatedData)
 async def update_snippet(
         *,
         db: AsyncSession = Depends(deps.async_get_db),
@@ -77,7 +77,7 @@ async def update_snippet(
     return snippet
 
 
-@router.delete("/{id}", response_model=schemas.Snippet)
+@router.delete("/{id}", response_model=schemas.SnippetWithRelatedData)
 async def delete_snippet(
         *,
         db: AsyncSession = Depends(deps.async_get_db),
