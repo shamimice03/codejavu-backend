@@ -8,6 +8,7 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy.sql.expression import select
 
 from app.crud.base import CRUDBase
+from app.models import Link
 from app.models.snippet import Snippet
 from app.schemas.snippet import SnippetCreate, SnippetUpdate, SnippetWithRelatedData
 
@@ -16,11 +17,19 @@ class CRUDSnippet(CRUDBase[Snippet, SnippetCreate, SnippetUpdate]):
     async def create_with_owner(
             self, db: AsyncSession, *, obj_in: SnippetCreate, user_id: int
     ) -> Snippet:
-        obj_in_data = jsonable_encoder(obj_in)
-
-        db_obj = self.model(**obj_in_data, user_id=user_id)  # type: ignore
+        db_obj = self.model(
+            title=obj_in.dict().get("title"),  # type: ignore
+            snippet=obj_in.dict().get("snippet"),  # type: ignore
+            language_id=obj_in.dict().get("language_id"),  # type: ignore
+            user_id=user_id)  # type: ignore
 
         db.add(db_obj)
+
+        await db.flush()  # flushing to get id
+        link_list = obj_in.dict().get("links")
+        for link_data in link_list:
+            link = Link(snippet_id=db_obj.id, url=link_data["url"])  # type: ignore
+            db.add(link)
         await db.commit()
         await db.refresh(db_obj)
         return db_obj

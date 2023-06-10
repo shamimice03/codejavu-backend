@@ -1,7 +1,8 @@
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
 
+from app.schemas.link import Link, LinkBase
 from app.schemas.language import Language
 from app.schemas.tag import Tag
 
@@ -17,6 +18,7 @@ class SnippetCreate(SnippetBase):
     title: str
     snippet: str
     language_id: int
+    links: Optional[List[LinkBase]] = []
 
 
 # Properties to receive on snippet update
@@ -43,6 +45,7 @@ class Snippet(SnippetInDBBase):
 
 class SnippetWithRelatedData(Snippet):
     tags: List[Tag] = []
+    links: List[Link] = []
     language: Language = None
 
 
