@@ -22,7 +22,7 @@ class SnippetCreate(SnippetBase):
 
 
 # Properties to receive on snippet update
-class SnippetUpdate(SnippetBase):
+class SnippetUpdate(SnippetCreate):
     pass
 
 
