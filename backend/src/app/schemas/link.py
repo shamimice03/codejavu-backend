@@ -1,15 +1,16 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 
 # Shared properties
 class LinkBase(BaseModel):
-    url: str
+    url: Optional[str] = None
 
 
 # Properties to receive on  link creation
 class LinkCreate(LinkBase):
-    url: str
-    snippet_id: int
+    pass
 
 
 # Properties to receive on  link update

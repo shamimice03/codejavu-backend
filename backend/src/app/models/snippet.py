@@ -4,7 +4,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String, Table
 from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
-from .tag_assign import TagAssign
+from .tag_assign import tag_assign
 
 if TYPE_CHECKING:
     from .user import User
@@ -17,9 +17,9 @@ class Snippet(Base):
     id: int = Column(Integer, primary_key=True, index=True)
     title: str = Column(String, index=True)
     snippet: str = Column(String, index=True)
-    user_id: int = Column(Integer, ForeignKey("user.id"))
+    user_id: Column["Integer"] = Column(Integer, ForeignKey("user.id"))
     user: "User" = relationship("User", back_populates="snippets")
     language_id: int = Column(Integer, ForeignKey("language.id"))
-    language: "Language" = relationship("Language", back_populates="snippets")
-    links: List["Link"] = relationship("Link")
-    tags: List["Tag"] = relationship("Tag", secondary=TagAssign)
+    language: "Language" = relationship("Language", back_populates="snippets", lazy="joined")
+    links: List["Link"] = relationship("Link", lazy="selectin")
+    tags: List["Tag"] = relationship("Tag", secondary=tag_assign, lazy="selectin") # todo learn what the eff selectin does

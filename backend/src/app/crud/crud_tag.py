@@ -30,7 +30,7 @@ class CRUDTag(CRUDBase[Tag, TagCreate, TagUpdate]):
             .limit(limit)
             .all()
         )
-        return result.scalars().all()
+        return list(result.scalars().all())
 
 
 tag = CRUDTag(Tag)

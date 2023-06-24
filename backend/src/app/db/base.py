@@ -7,4 +7,4 @@ from app.models.user import User  # noqa
 from app.models.language import Language  # noqa
 from app.models.link import Link  # noqa
 from app.models.tag import Tag  # noqa
-from app.models.tag_assign import TagAssign  # noqa
+from app.models.tag_assign import tag_assign  # noqa

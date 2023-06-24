@@ -1,15 +1,10 @@
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
 
-from app.models import User
-from app.models.language import Language
-from app.models.link import Link
-from app.models.tag import Tag
-from app.schemas.language import LanguageBase
-from app.schemas.link import LinkBase
-from app.schemas.tag import TagBase
-from app.schemas.user import UserBase
+from app.schemas.link import Link, LinkBase
+from app.schemas.language import Language
+from app.schemas.tag import Tag
 
 
 # Shared properties
@@ -23,10 +18,11 @@ class SnippetCreate(SnippetBase):
     title: str
     snippet: str
     language_id: int
+    links: Optional[List[LinkBase]] = []
 
 
 # Properties to receive on snippet update
-class SnippetUpdate(SnippetBase):
+class SnippetUpdate(SnippetCreate):
     pass
 
 
@@ -45,6 +41,12 @@ class SnippetInDBBase(SnippetBase):
 # Properties to return to client
 class Snippet(SnippetInDBBase):
     pass
+
+
+class SnippetWithRelatedData(Snippet):
+    tags: List[Tag] = []
+    links: List[Link] = []
+    language: Language = None
 
 
 # Properties stored in DB

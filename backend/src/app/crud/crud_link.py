@@ -30,7 +30,7 @@ class CRUDLink(CRUDBase[Link, LinkCreate, LinkUpdate]):
             .limit(limit)
             .all()
         )
-        return result.scalars().all()
+        return list(result.scalars().all())
 
 
 link = CRUDLink(Link)
