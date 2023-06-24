@@ -4,4 +4,4 @@ from .token import Token, TokenPayload
 from .user import User, UserCreate, UserInDB, UserUpdate
 from .snippet import Snippet, SnippetCreate, SnippetInDB, SnippetUpdate, SnippetWithRelatedData
 from .language import Language, LanguageCreate, LanguageInDB, LanguageUpdate
-from .tag import Tag, TagCreate, TagInDB, TagInDBBase
+from .tag import Tag, TagCreate, TagUpdate, TagInDB, TagInDBBase

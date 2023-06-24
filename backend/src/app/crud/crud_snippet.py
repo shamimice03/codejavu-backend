@@ -1,16 +1,16 @@
 import logging
 from typing import List, Dict, Any, Union
 
+from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
-# from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
 from sqlalchemy.sql.expression import select
 
-from app.crud.base import CRUDBase, ModelType
-from app.models import Link
+from app import crud
+from app.crud.base import CRUDBase
+from app.models import Link, Tag
 from app.models.snippet import Snippet
-from app.schemas.snippet import SnippetCreate, SnippetUpdate, SnippetWithRelatedData
+from app.schemas.snippet import SnippetCreate, SnippetUpdate
 
 
 class CRUDSnippet(CRUDBase[Snippet, SnippetCreate, SnippetUpdate]):
@@ -22,6 +22,10 @@ class CRUDSnippet(CRUDBase[Snippet, SnippetCreate, SnippetUpdate]):
             snippet=obj_in.dict().get("snippet"),  # type: ignore
             language_id=obj_in.dict().get("language_id"),  # type: ignore
             user_id=user_id)  # type: ignore
+
+        tag_ids = obj_in.dict().get("tag_ids")
+        tags = await self.assign_tags_from_id_list(db, tag_ids)
+        db_obj.tags.extend(tags)
 
         db.add(db_obj)
 
@@ -64,6 +68,11 @@ class CRUDSnippet(CRUDBase[Snippet, SnippetCreate, SnippetUpdate]):
             if field in update_data:
                 setattr(db_obj, field, update_data[field])
 
+        db_obj.tags.clear()
+        tag_ids = obj_in.dict().get("tag_ids")
+        tags = await self.assign_tags_from_id_list(db, tag_ids)
+        db_obj.tags.extend(tags)
+
         links_to_be_deleted = await db.execute(
             select(Link)
             .filter(Link.snippet_id == db_obj.id)
@@ -81,6 +90,15 @@ class CRUDSnippet(CRUDBase[Snippet, SnippetCreate, SnippetUpdate]):
         await db.refresh(db_obj)
 
         return db_obj
+
+    async def assign_tags_from_id_list(self, db: AsyncSession, tag_ids: List[int]) -> List[Tag]:
+        # Retrieve the tags from the database using the provided tag IDs
+        tags = await crud.tag.get_multi_by_ids(db=db, tag_ids=tag_ids)
+
+        if len(tags) != len(tag_ids):
+            raise HTTPException(status_code=400, detail='One or more provided tag IDs are invalid')
+
+        return tags
 
 
 snippet = CRUDSnippet(Snippet)
