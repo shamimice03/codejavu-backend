@@ -8,7 +8,7 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy.sql.expression import select
 
 from app.crud.base import CRUDBase, ModelType
-from app.models import Link
+from app.models import Link, Tag
 from app.models.snippet import Snippet
 from app.schemas.snippet import SnippetCreate, SnippetUpdate, SnippetWithRelatedData
 
@@ -22,6 +22,13 @@ class CRUDSnippet(CRUDBase[Snippet, SnippetCreate, SnippetUpdate]):
             snippet=obj_in.dict().get("snippet"),  # type: ignore
             language_id=obj_in.dict().get("language_id"),  # type: ignore
             user_id=user_id)  # type: ignore
+
+        tag_list = obj_in.dict().get("tags")
+
+        for tag_data in tag_list:
+            existing_tags =
+            tag = Tag(name=tag_data["name"])  # type: ignore
+            db_obj.tags.append(tag)
 
         db.add(db_obj)
 

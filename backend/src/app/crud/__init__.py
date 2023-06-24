@@ -2,6 +2,7 @@ from .crud_item import item
 from .crud_user import user
 from .crud_snippet import snippet
 from .crud_language import language
+from .crud_tag import tag
 
 # For a new basic set of CRUD operations you could just do
 
