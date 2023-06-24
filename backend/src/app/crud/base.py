@@ -48,6 +48,15 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         )
         return list(result.scalars().all())
 
+    async def get_multi_by_ids(
+            self, db: AsyncSession, *, tag_ids: [int]
+    ) -> List[ModelType]:
+        result = await db.execute(
+            select(self.model)
+            .filter(self.model.id.in_(tag_ids))
+        )
+        return list(result.scalars().all())
+
     async def create(self, db: AsyncSession, *, obj_in: CreateSchemaType) -> ModelType:
         # obj_in_data = jsonable_encoder(obj_in)
         obj_in_data = obj_in.dict()

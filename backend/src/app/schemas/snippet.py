@@ -19,6 +19,7 @@ class SnippetCreate(SnippetBase):
     snippet: str
     language_id: int
     links: Optional[List[LinkBase]] = []
+    tag_ids: Optional[List[int]] = []
 
 
 # Properties to receive on snippet update

@@ -42,24 +42,6 @@ async def create_tag(
     return tag
 
 
-@router.get("/{id}", response_model=schemas.Tag)
-async def read_tag(
-        *,
-        db: AsyncSession = Depends(deps.async_get_db),
-        id: int,
-        current_user: models.User = Depends(deps.get_current_active_user),
-) -> Any:
-    """
-    Get tag by ID.
-    """
-    tag = await crud.tag.get(db=db, id=id)
-    if not tag:
-        raise HTTPException(status_code=404, detail="Tag not found")
-    if not crud.user.is_superuser(current_user) and (tag.user_id != current_user.id):
-        raise HTTPException(status_code=400, detail="Not enough permissions")
-    return tag
-
-
 @router.put("/{id}", response_model=schemas.Tag)
 async def update_tag(
         *,
@@ -88,4 +70,21 @@ async def delete_tag(
     """
     tag = await read_tag(db=db, id=id, current_user=current_user)
     tag = crud.tag.remove(db=db, id=id)
+    return tag
+
+
+async def read_tag(
+        *,
+        db: AsyncSession = Depends(deps.async_get_db),
+        id: int,
+        current_user: models.User = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    This method is used by other methods, but isn't accessible as an API endpoint
+    """
+    tag = await crud.tag.get(db=db, id=id)
+    if not tag:
+        raise HTTPException(status_code=404, detail="Tag not found")
+    if not crud.user.is_superuser(current_user) and (tag.user_id != current_user.id):
+        raise HTTPException(status_code=400, detail="Not enough permissions")
     return tag

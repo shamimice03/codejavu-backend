@@ -12,7 +12,6 @@ class TagBase(BaseModel):
 # Properties to receive on  tag creation
 class TagCreate(TagBase):
     name: str
-    user_id: Optional[int] = None
 
 
 # Properties to receive on  tag update
