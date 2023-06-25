@@ -25,7 +25,6 @@ async def read_snippets(
         snippets = await crud.snippet.get_multi_by_owner(
             db=db, user_id=current_user.id, skip=skip, limit=limit
         )
-    print(vars(snippets[0]))
     return snippets
 
 
