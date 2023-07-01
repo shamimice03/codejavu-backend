@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 # Shared properties
 class LanguageBase(BaseModel):
-    id: int
+    id: Optional[int] = None
 
 
 # Properties to receive on  language creation

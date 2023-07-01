@@ -5,8 +5,9 @@ from httpx import AsyncClient
 # from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app import schemas, crud
 from app.core.config import settings
-from app.tests.utils.snippet import create_random_snippet
+from app.tests.utils.snippet import create_random_snippet, initialize_data
 
 pytestmark = pytest.mark.asyncio
 
@@ -14,29 +15,27 @@ pytestmark = pytest.mark.asyncio
 async def test_create_snippet(
         client: AsyncClient, superuser_token_headers: dict, async_get_db: AsyncSession
 ) -> None:
+    r = await client.get(f"{settings.API_V1_STR}/users/me", headers=superuser_token_headers)
+    current_user = r.json()
+    await initialize_data(async_get_db, current_user["id"])
+
     data = {
-        "title": "oldddd",
-        "snippet": "<?php echo \"heyy\">",
-        "language_id": {
-            "id": 1
-        },
+        "title": "test",
+        "snippet": "<?php echo \"test code\">",
+        "language_id": 1,
+        "tag_ids": [2],
         "links": [
-            {"url": "new_url2"}
-        ],
-        "tags": [
-            {
-                "id": 1,
-                "name": "bla"
-            }
+            {"url": "hehe/2ag"}
         ]
     }
+
     response = await client.post(
         f"{settings.API_V1_STR}/snippets/", headers=superuser_token_headers, json=data,
     )
     assert response.status_code == 200
     content = response.json()
     assert content["title"] == data["title"]
-    assert content["description"] == data["description"]
+    assert content["snippet"] == data["snippet"]
     assert "id" in content
     assert "user_id" in content
 
@@ -51,6 +50,6 @@ async def test_read_snippet(
     assert response.status_code == 200
     content = response.json()
     assert content["title"] == snippet.title
-    assert content["description"] == snippet.description
+    assert content["snippet"] == snippet.snippet
     assert content["id"] == snippet.id
     assert content["user_id"] == snippet.user_id
