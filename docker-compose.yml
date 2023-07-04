@@ -68,7 +68,7 @@ services:
         - traefik.http.routers.${STACK_NAME?Variable not set}-proxy-http.middlewares=${STACK_NAME?Variable not set}-www-redirect,${STACK_NAME?Variable not set}-https-redirect
 
   db:
-    image: postgres:12
+    image: postgres:12.14-alpine
     volumes:
       - app-db-data:/var/lib/postgresql/data/pgdata
     env_file:
@@ -108,7 +108,7 @@ services:
   queue:
     # image: rabbitmq:3
     # Using the below image instead is required to enable the "Broker" tab in the flower UI:
-    image: rabbitmq:3-management
+    image: rabbitmq:3.9.29-management-alpine
     #
     # You also have to change the flower command
 
