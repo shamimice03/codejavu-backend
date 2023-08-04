@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - dev1.0
+  pull_request:
+    branches:
+      - dev1.0
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: 'Create env file'
+        run: |
+          touch .env
+          echo "${{ secrets.ENV }}" >> .env
+          cat .env
+      - name: Run Test Script
+        run: sh ./scripts/test.sh
